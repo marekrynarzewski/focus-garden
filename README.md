@@ -1,7 +1,7 @@
 # InPost API - create_shipment.php
 
 ## Opis
-Skrypt PHP do utworzenia przesyłki kurierskiej "courier standard" oraz zamówienia kuriera przy użyciu API InPost.
+Skrypt PHP do utworzenia przesyłki kurierskiej "inpost_courier standard" oraz zamówienia kuriera przy użyciu API InPost.
 
 ## Wymagania
 - PHP 7.4+ lub 8.x
@@ -12,7 +12,7 @@ Skrypt PHP do utworzenia przesyłki kurierskiej "courier standard" oraz zamówie
 
 1. Sklonuj repozytorium:
     ```bash
-    git clone <repo-url> inpost_test
+    git clone https://github.com/marekrynarzewski/focus-garden.git inpost_test
     cd inpost_test
     ```
 
@@ -27,8 +27,8 @@ Skrypt PHP do utworzenia przesyłki kurierskiej "courier standard" oraz zamówie
     ```
 
 4. W pliku `.env` uzupełnij:
-    ```
-    API_TOKEN=your_real_api_token_here
+    ```dotenv
+    PACZKOMATY_INPOST_APITOKEN=your_real_api_token_here
     ```
 
 ## Uruchomienie

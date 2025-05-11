@@ -103,9 +103,8 @@ try {
     }
 } catch (RequestException $e) {
     $error = $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : $e->getMessage();
-    $line = $e->getTraceAsString();
     echo "API error:\n$error\n";
-    file_put_contents('log.txt', "Error:\n$error\nLine: $line", FILE_APPEND);
+    file_put_contents('log.txt', "Error:\n$error\n", FILE_APPEND);
 } catch (Exception $e) {
     echo "Exception:\n" . $e->getMessage() . "\n";
     file_put_contents('log.txt', "Exception:\n" . $e->getMessage() . "\n", FILE_APPEND);
