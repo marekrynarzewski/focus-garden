@@ -29,28 +29,18 @@ $client = new Client([
 $shipmentData = [
     // tu wstawiamy dane odbiorcy
     'receiver' => [
+        'company_name' => 'Przykładowa Nazwa',
+        'first_name' => 'Jan',
+        'last_name' => 'Kowalski',
         'email' => 'jan.kowalski@example.com',
         'phone' => '600700800',
         'name' => 'Jan Kowalski',
         'address' => [
-            'line1' => 'ul. Zielona 10',
+            'street' => 'Zielona',
+            'building_number' => '10',
             'city' => 'Warszawa',
-            'postcode' => '00-001',
-            'country_code' => 'PL'
-        ],
-
-        'name' => null,
-        'company_name' => 'company_name',
-        'first_name' => null,
-        'last_name' => null,
-        'email' => null,
-        'phone' => null,
-        'address' => [
-            'street' => null,
-            'building_number' => null,
-            'city' => null,
-            'post_code' => null,
-            'country_code' => null,
+            'post_code' => '00-001',
+            'country_code' => 'PL',
         ],
     ],
     // tu wstawiamy nasze dane
@@ -70,9 +60,19 @@ $shipmentData = [
         ]
     ],
     'parcels' => [
-        [
-            'dimensions' => ['length' => 20, 'width' => 20, 'height' => 10],
-            'weight' => 1.5
+       [
+            "id" => "small package",
+            "dimensions" => [
+                "length" => "80",
+                "width" => "360",
+                "height" => "640",
+                "unit" => "mm"
+            ],
+            "weight" => [
+                "amount" => "25",
+                "unit" => "kg"
+            ],
+            "is_non_standard" => false
         ]
     ],
     // tu ustawiamy typ przesyłki
@@ -103,8 +103,9 @@ try {
     }
 } catch (RequestException $e) {
     $error = $e->hasResponse() ? $e->getResponse()->getBody()->getContents() : $e->getMessage();
+    $line = $e->getTraceAsString();
     echo "API error:\n$error\n";
-    file_put_contents('log.txt', "Error:\n$error\n", FILE_APPEND);
+    file_put_contents('log.txt', "Error:\n$error\nLine: $line", FILE_APPEND);
 } catch (Exception $e) {
     echo "Exception:\n" . $e->getMessage() . "\n";
     file_put_contents('log.txt', "Exception:\n" . $e->getMessage() . "\n", FILE_APPEND);
