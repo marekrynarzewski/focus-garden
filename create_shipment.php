@@ -36,10 +36,10 @@ $shipmentData = [
         'phone' => '600700800',
         'name' => 'Jan Kowalski',
         'address' => [
-            'street' => 'Zielona',
-            'building_number' => '10',
-            'city' => 'Warszawa',
-            'post_code' => '00-001',
+            'street' => 'Fabryczna',
+            'building_number' => '2',
+            'city' => 'Gniezno',
+            'post_code' => '62-200',
             'country_code' => 'PL',
         ],
     ],
@@ -52,10 +52,10 @@ $shipmentData = [
         'email' => 'example@domain.pl',
         'phone' => '500400300',
         'address' => [
-            'street' => 'Czerniakowska',
+            'street' => 'Na stoku',
             'building_number' => '18',
-            'city' => 'Warszawa',
-            'post_code' => '10-000',
+            'city' => 'Kielce',
+            'post_code' => '25-437',
             'country_code' => 'PL',
         ]
     ],
@@ -77,7 +77,6 @@ $shipmentData = [
     ],
     // tu ustawiamy typ przesyłki
     'service' => 'inpost_courier_standard',
-    'only_choice_of_offer' => true,
 ];
 
 try {
@@ -99,13 +98,30 @@ try {
         $response = $client->get("/v1/shipments/{$shipmentId}");
         $shipment = json_decode($response->getBody(), true);
         $status = $shipment['status'];
-        echo "Aktualny status: {$status}\n";
-        file_put_contents('log.txt', "Shipment $shipmentId has offer selected\n", FILE_APPEND);
-    } while ($status !== 'offer_selected');
+        $shipmentJson = json_encode($shipment);
+        echo "Aktualny status: {$status} {$shipmentJson} \n";
+        file_put_contents('log.txt', "Shipment $shipmentId has confirmed\n", FILE_APPEND);
+    } while ($status !== 'confirmed');
 
     if ($shipmentId) {
+        $dispatchData = [
+            "shipments" => [$shipmentId],
+            "comment" => "Dowolny komentarz do zlecenia odbioru",
+            "name" => "Przykładowa nazwa DispatchPoint",
+            "phone" => "505404202",
+            "email" => "sample@email.com",
+            "address" => [
+                "street" => "Malborska",
+                "building_number" => "130",
+                "city" => "Krakow",
+                "post_code" => "31-209",
+                "country_code" => "PL"
+            ]
+        ];
         // Zamów kuriera
-        $orderResponse = $client->post("/v1/shipments/$shipmentId/dispatch");
+        $orderResponse = $client->post("/v1/organizations/$organizationId/dispatch_orders", [
+            'json' => $dispatchData
+        ]);
         $orderBody = $orderResponse->getBody()->getContents();
         echo "Courier ordered:\n$orderBody\n";
         file_put_contents('log.txt', "Dispatch Response:\n$orderBody\n", FILE_APPEND);
