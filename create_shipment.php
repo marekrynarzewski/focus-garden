@@ -24,7 +24,7 @@ $client = new Client([
 ]);
 
 /**
- * Przykładowe dane przesyłki typu "courier standard"
+ * Przykładowe dane przesyłki typu "inpost_courier standard"
  */
 $shipmentData = [
     // tu wstawiamy dane odbiorcy
@@ -77,11 +77,13 @@ $shipmentData = [
     ],
     // tu ustawiamy typ przesyłki
     'service' => 'inpost_courier_standard',
+    'only_choice_of_offer' => true,
 ];
 
 try {
+    $organizationId = $_ENV['PACZKOMATY_INPOST_ORGANIZATIONID'];
     // Utworzenie przesyłki
-    $response = $client->post('/v1/organizations/'.$_ENV['PACZKOMATY_INPOST_ORGANIZATIONID'].'/shipments', [
+    $response = $client->post('/v1/organizations/'.$organizationId.'/shipments', [
         'json' => $shipmentData
     ]);
 
@@ -91,6 +93,15 @@ try {
 
     $shipment = json_decode($body, true);
     $shipmentId = $shipment['id'] ?? null;
+
+    do {
+        sleep(5); // Odczekaj 5 sekund przed kolejnym sprawdzeniem
+        $response = $client->get("/v1/shipments/{$shipmentId}");
+        $shipment = json_decode($response->getBody(), true);
+        $status = $shipment['status'];
+        echo "Aktualny status: {$status}\n";
+        file_put_contents('log.txt', "Shipment $shipmentId has offer selected\n", FILE_APPEND);
+    } while ($status !== 'offer_selected');
 
     if ($shipmentId) {
         // Zamów kuriera
