@@ -45,18 +45,18 @@ $shipmentData = [
     ],
     // tu wstawiamy nasze dane
     'sender' => [
-        'name' => null,
+        'name' => 'Maciej',
         'company_name' => 'company_name',
         'first_name' => null,
         'last_name' => null,
-        'email' => null,
-        'phone' => null,
+        'email' => 'example@domain.pl',
+        'phone' => '500400300',
         'address' => [
-            'street' => null,
-            'building_number' => null,
-            'city' => null,
-            'post_code' => null,
-            'country_code' => null,
+            'street' => 'Czerniakowska',
+            'building_number' => '18',
+            'city' => 'Warszawa',
+            'post_code' => '10-000',
+            'country_code' => 'PL',
         ]
     ],
     'parcels' => [
