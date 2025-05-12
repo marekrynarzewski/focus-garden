@@ -29,6 +29,7 @@ Skrypt PHP do utworzenia przesyłki kurierskiej "inpost_courier standard" oraz z
 4. W pliku `.env` uzupełnij:
     ```dotenv
     PACZKOMATY_INPOST_APITOKEN=your_real_api_token_here
+    PACZKOMATY_INPOST_ORGANIZATIONID=1111
     ```
 
 ## Uruchomienie
